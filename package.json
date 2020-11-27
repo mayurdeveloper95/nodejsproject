@@ -1,0 +1,31 @@
+{
+  "name": "nodeproject",
+  "version": "1.0.0",
+  "description": "node js project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayurdeveloper95/nodejsproject.git"
+  },
+  "keywords": [
+    "nosejs",
+    "express",
+    "api",
+    "mongodb"
+  ],
+  "author": "mayur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayurdeveloper95/nodejsproject/issues"
+  },
+  "homepage": "https://github.com/mayurdeveloper95/nodejsproject#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "joi": "^17.3.0",
+    "mongoose": "^5.10.16",
+    "nodemon": "^2.0.6"
+  }
+}
