@@ -23,8 +23,11 @@
   },
   "homepage": "https://github.com/mayurdeveloper95/nodejsproject#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "config": "^3.3.3",
     "express": "^4.17.1",
     "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.16",
     "nodemon": "^2.0.6"
   }
