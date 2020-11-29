@@ -9,7 +9,7 @@ let categorySchema=new mongoose.Schema({
 
 let CategoryModel=mongoose.model("categories",categorySchema);
 
-function validateError(error)
+function validationError(error)
 {
 let schema=joi.object({
 categoryName:joi.string().required().min(5).max(100),
@@ -18,4 +18,4 @@ subCategoryId:joi.string().required()
 return schema.validate(error);
 }
 
-module.exports={CategoryModel,categorySchema,validateError};
+module.exports={CategoryModel,categorySchema,validationError};

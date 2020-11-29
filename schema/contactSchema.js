@@ -9,7 +9,7 @@ let contactSchema=new mongoose.Schema({
 
 let ContactModel=mongoose.model("contactus",contactSchema);
 
-function validateError(error)
+function validationError(error)
 {
     let schema=joi.object({
         name:joi.string().required().min(5).max(30),
@@ -19,4 +19,4 @@ function validateError(error)
     return schema.validate(error);
 }
 
-module.exports={ContactModel,validateError};
+module.exports={ContactModel,validationError};

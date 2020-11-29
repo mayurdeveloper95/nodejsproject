@@ -23,7 +23,7 @@ cardItems:{type:cartSchema,required:true}
 
 let CheckoutModel=mongoose.model("CheckOut",checkoutSchema);
 
-function validateError(error)
+function validationError(error)
 {
     let schema=joi.object({
         prodId:joi.string().min(5).max(50),
@@ -38,4 +38,4 @@ function validateError(error)
     return schema.validate(error);
 }
 
-module.exports={cartSchema,checkoutSchema,CartModel,CheckoutModel,validateError};
+module.exports={cartSchema,checkoutSchema,CartModel,CheckoutModel,validationError};

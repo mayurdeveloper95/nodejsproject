@@ -8,7 +8,7 @@ let subCategorySchema=new mongoose.Schema({
 
 let SubCategoryModel=mongoose.model("SubCategories",subCategorySchema);
 
-function validateError(error)
+function validationError(error)
 {
 let schema=joi.object({
     name:joi.string().required().min(5).max(100),
@@ -17,4 +17,4 @@ let schema=joi.object({
 return schema.validate(error);
 }
 
-module.exports={SubCategoryModel,subCategorySchema,validateError};
+module.exports={SubCategoryModel,subCategorySchema,validationError};

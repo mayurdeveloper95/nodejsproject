@@ -1,5 +1,7 @@
 let mongoose=require("mongoose");
 let joi=require("joi");
+let jwt=require("jsonwebtoken");
+let config=require("config");
 
 let userSchema=new mongoose.Schema({
     firstname:{type:String,required:true,min:5,max:30},
@@ -16,7 +18,10 @@ let userSchema=new mongoose.Schema({
     recordDate:{type:Date, default:Date.now},
     updateDate:{type:Date, default:Date.now}
 });
-
+userSchema.methods.genToken=function()
+{
+return jwt.sign({firstname:this.firstname},config.get("key"));
+}
 let UserModel=mongoose.model("UserRegister",userSchema);
 
 function validationError (error)
@@ -27,7 +32,7 @@ function validationError (error)
         newsLetterCheck:joi.boolean(),
         UserLogin:{
             userEmail:joi.string().required().email(),
-            userPassword=joi.string().required().min(8).max(25),
+            userPassword:joi.string().required().min(8).max(25)
         },
         termsAcceptCheck:joi.boolean().required(),
         resetPasswordToken:joi.string(),

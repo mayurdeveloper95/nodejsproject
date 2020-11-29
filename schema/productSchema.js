@@ -45,7 +45,7 @@ updateDate:{type:Date,default:Date.now}
 
 let ProductModel=mongoose.model("products",productSchema);
 
-function validateError(error)
+function validationError(error)
 {
     schema=joi.object({
         name:joi.string().required().min(5).max(30),
@@ -65,4 +65,4 @@ function validateError(error)
     return schema.validate(error);
 }
 
-module.exports={ProductModel,validateError};
+module.exports={ProductModel,validationError};
