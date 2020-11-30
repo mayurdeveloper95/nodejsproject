@@ -44,33 +44,33 @@ router.post("/newuser",async(req,res)=>{
   let salt=await bcrypt.genSalt(10);
         createuser.UserLogin.userPassword=await bcrypt.hash(createuser.UserLogin.userPassword,salt);
         let user=await createuser.save();
-
-        
               //sender details
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "*****************", // generated ethereal user
-      pass: "****************", // generated ethereal password
+      user: "*********************", // generated ethereal user
+      pass: "********", // generated ethereal password
     },
   });
 
 let mailoptions=  {
-    from: '"Fred Foo 👻" <webs0creations@gmail.com>', // sender address
+    from: '"Fred Foo 👻" <testworks59@gmail.com>', // sender address
     to: user.UserLogin.userEmail, // list of receivers
     subject: "New User Registered", // Subject line
-    text: "new user registered</br> Email:user.UserLogin.userEmail </br> password:user.UserLogin.userPassword"
+    text: "new user registered",
+    html: `Email:${user.UserLogin.userEmail} <br/>
+            Password:${user.UserLogin.userPassword}`
   };
-        let token=user.genToken();
+        
         transporter.sendMail(mailoptions,(error,info)=>{
             if(error){return console.error(error)}
             else{
                 console.log(`email send ,${info.messageId}`);
             }
           });
-        
+          let token=user.genToken();
         res.header("auth-key",token).send({message:`new user registered and your login information send to ${user.UserLogin.userEmail}`,u:user,t:token});
    }
     catch(error)
