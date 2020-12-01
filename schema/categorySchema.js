@@ -4,7 +4,7 @@ let subcategory=require("./subCategorySchema");
 
 let categorySchema=new mongoose.Schema({
     categoryName:{type:String,required:true,min:1,max:100},
-    subCategory:[subcategory.subCategorySchema]
+    subCategory:[{type:subcategory.subCategorySchema}]
 });
 
 let CategoryModel=mongoose.model("categories",categorySchema);

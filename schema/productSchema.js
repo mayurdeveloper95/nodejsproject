@@ -1,32 +1,15 @@
 let mongoose=require("mongoose");
 let joi=require("joi");
-let category=require("");
 let subcategory=require("./subCategorySchema");
 let category=require("./categorySchema");
-
-let categorySchema=new mongoose.Schema({
-    categoryName:{type:String,required:true,min:1,max:100},
-    subCategory:[subcategory.subCategorySchema]
-});
-
-let CategoryModel=mongoose.model("categories",categorySchema);
-
-function validateError(error)
-{
-let schema=joi.object({
-categoryName:joi.string().required().min(5).max(100),
-subCategoryId:joi.string().required()
-});
-return schema.validate(error);
-}
-
-module.exports={CategoryModel,categorySchema,validateError};
-
+let images=require("./productImageSchema");
 
 let productSchema=new mongoose.Schema({
-name:{type:String,required:true,min:5,max:30},
-image:{type:String,required:true,min:5,max:200},
-description:{type:String,required:true,min:5,max:200},
+name:{type:String,required:true,min:5,max:200},
+image:{
+    type:images.imageschema,required:true
+},
+description:{type:String,required:true,min:5,max:500},
 price:{type:Number,required:true,minlength:1},
 quantity:{type:Number,required:true,min:1,max:100},
 offerPrice:{type:Number,required:true,minlength:1},
@@ -48,16 +31,16 @@ let ProductModel=mongoose.model("products",productSchema);
 function validationError(error)
 {
     schema=joi.object({
-        name:joi.string().required().min(5).max(30),
-        image:joi.string().required().min(5).max(200),
-        description:joi.string().required().min(5).max(200),
+        name:joi.string().required().min(5).max(200),
+        imageId:joi.string().min(5).max(500),
+        description:joi.string().required().min(5).max(500),
         price:joi.number().required().min(1),
         quantity:joi.number().required().min(1).max(100),
         offerPrice:joi.number().required().min(1),
         isAvailable:joi.boolean().required(),
         isTodayOffer:joi.boolean().required(),
-        categoryId:joi.string().required(),
-        subCategoryId:joi.string().required(),
+        categoryId:joi.string(),
+        subCategoryId:joi.string(),
         isAdmin:joi.boolean(),
         recordDate:joi.date(),
         updateDate:joi.date()

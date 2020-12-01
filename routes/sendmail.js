@@ -5,6 +5,7 @@ let crypto=require("crypto");
 let nodemailer=require("nodemailer");
 
 router.post("/sendmail",async(req,res)=>{
+  try{
 let email=await User.UserModel.findOne({"UserLogin.userEmail":req.body.UserLogin.userEmail});
 if(!email){return res.status(402).send({message:"invalid email id"})};
 let token=crypto.randomBytes(35).toString("hex");
@@ -37,6 +38,11 @@ let mailoptions=  {
   });
 
   res.send({message:"please check your email for change the password"});
+}
+catch(error)
+    {
+        res.status(500).send(error.message);
+    }
 });
 
 module.exports=router;
