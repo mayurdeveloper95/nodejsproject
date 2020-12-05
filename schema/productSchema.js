@@ -19,7 +19,7 @@ category:{
     type:category.categorySchema,required:true
 },
 subCategory:{
-    type:subcategory.subCategorySchema,required:true
+    type:subcategory.subCategorySchema
 },
 isAdmin:{type:Boolean},
 recordDate:{type:Date,default:Date.now},
@@ -32,7 +32,7 @@ function validationError(error)
 {
     schema=joi.object({
         name:joi.string().required().min(5).max(200),
-        imageId:joi.string().min(5).max(500),
+        imageId:joi.string().required(),
         description:joi.string().required().min(5).max(500),
         price:joi.number().required().min(1),
         quantity:joi.number().required().min(1).max(100),

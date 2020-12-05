@@ -33,12 +33,17 @@ else{
   });
 
   router.post("/productimageupload", upload.single("image"), async(req,res)=>{
-    let fu=new imageupload({
-        _id:imageupload._id,
-      image:port + "/productimages/" + req.file.filename
+    try{
+    let fu=new imageupload.ImageModel({
+        image:port + "/productimages/" + req.file.filename
     });
     let sd=await fu.save();
     res.send(sd);
+  }
+  catch(error)
+    {
+        res.status(500).send(error.message);
+    }
   });
 
   module.exports=router;
