@@ -62,18 +62,11 @@ catch(error)
 
 router.post("/cartbyuser",auth,async(req,res)=>{
 try{
-let uid= await userreg.UserModel.find({"UserLogin.userEmail":req.body.UserLogin.userEmail})
+let uid= await userreg.UserModel.findById(req.userreg._id)
                                 .select("firstname lastname UserLogin.userEmail isAdmin");
 
-let checkoutcart=await usercart.CheckoutModel({
-    userEmail:req.body.userEmail,
-cartItems:
-{
-    prodId:req.body.prodId
-}
-});
-await checkoutcart.save();
-res.send({message:"success",c:checkoutcart,ch:checkout});
+let checkoutcart=await usercart.CheckoutModel.find({"userEmail":uid.UserLogin.userEmail});
+res.send({message:"success",c:checkoutcart});
 }
 catch(error)
     {
