@@ -33,7 +33,7 @@ catch(error)
 
 router.post("/pageIndex/:page",async(req,res)=>{
     try{
-    let perpage=1;
+    let perpage=2;
     let currentpage=req.params.page || 1;
     let data=await subcategory.SubCategoryModel
                                 .find()
