@@ -122,7 +122,6 @@ catch(error)
         res.status(500).send(error.message);
     }
 });
-
 router.post("/productpageindex/:page",async(req,res)=>{
     try{
     let perpage=2;
@@ -144,26 +143,24 @@ router.post("/productpageindex/:page",async(req,res)=>{
     res.status(500).send(error.message);
 }
     });
-
-
     router.post("/category/:catid/page/:pageindex",async(req,res)=>{
         try{ 
-
-            let cat=req.params.catid;
         let perpage=1;
-        let currentpage=req.params.page || 1;
+        let currentpage=req.params.pageindex || 1;
+        let cat=await category.CategoryModel.findById(req.params.catid);
         let data= await products.ProductModel.
-                                     find({"category.categoryName":cat})
+                                     find({"category.categoryName":cat.categoryName})
                                     .skip((perpage*currentpage)-perpage)
-                                    .limit(perpage)
-
-                let pagecount=await products.ProductModel.count({"category.categoryName":cat});
+                                    .limit(perpage);
+                let pagecount=await products.ProductModel.find({"category.categoryName":cat.categoryName}).count();
                 let totalpages=Math.ceil(pagecount/perpage);
 
                res.send({
                     perpage:perpage,
+                    currentpage:currentpage,
                     data:data,
-                    totalpages:totalpages
+                    pagecount:pagecount,
+                    totalpages:totalpages,
                 });
             
         }
@@ -177,22 +174,21 @@ router.post("/productpageindex/:page",async(req,res)=>{
 
         router.post("/category/:catid/subcategory/:subcatid/page/:pageindex",async(req,res)=>{
             try{
-                
-               let cat=req.params.catid;
-               let subcat=req.params.subcatid;
-               
             let perpage=1;
-            let currentpage=req.params.page || 1;
-            let data=await products.ProductModel.find({"category.categoryName":cat})
-                                        .and([{"category.subCategory.name":subcat}])
+            let currentpage=req.params.pageindex || 1;
+            let cat=await category.CategoryModel.findById(req.params.catid);
+            let subcat=await subcategory.SubCategoryModel.findById(req.params.subcatid);
+
+            let data=await products.ProductModel.find({"category.categoryName":cat.categoryName,"category.subCategory.name":subcat.name})
                                         .skip((perpage*currentpage)-perpage)
                                         .limit(perpage)
             
-                    let pagecount=await products.ProductModel.count({"category.subCategory.name":subcat});
+                    let pagecount=await products.ProductModel.find({"category.categoryName":cat.categoryName,"category.subCategory.name":subcat.name}).count();
                     let totalpages=Math.ceil(pagecount/perpage);
           
                     res.send({
                         perpage:perpage,
+                        currentpage:currentpage,
                         data:data,
                         totalpages:totalpages
                     });

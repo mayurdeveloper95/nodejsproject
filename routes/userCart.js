@@ -5,13 +5,14 @@ let usercart=require("../schema/userCartSchema");
 let auth=require("../middleware/auth");
 let userreg=require("../schema/userRegistrationSchema");
 
-router.post("/addtocart",async(req,res)=>{
+router.post("/addtocart",auth,async(req,res)=>{
 try{
 let {error}=usercart.validationError(req.body);
 if(error){return res.status(403).send(error.details[0].message)};
 let img= await image.ImageModel.findById(req.body.imageId);
 if(!img){return res.status(403).send({message:"image id not found "})};
-let addcart=usercart.CartModel({
+let uid= await userreg.UserModel.find(req.userRegistrationSchema._id).select("UserLogin.userEmail");
+let addcart=await usercart.CartModel({
 prodId:req.body.prodId,
 name:req.body.name,
 image:{
@@ -22,8 +23,12 @@ image:{
   quantity:req.body.quantity,
   totalPrice:req.body.price*req.body.quantity
 });
+let carditem=await usercart.CheckoutModel({
+    email:uid.UserLogin.userEmail,
+    carditems:addcart
+});
 
-let savecart= await addcart.save();
+let savecart= await carditem.save();
 res.send({message:"prodcut added to cart",s:savecart});
 }
 catch(error)
@@ -62,10 +67,10 @@ catch(error)
 
 router.post("/cartbyuser",auth,async(req,res)=>{
 try{
-let uid= await userreg.UserModel.findById(req.userreg._id)
+let uid= await userreg.UserModel.find(req.userRegistrationSchema._id)
                                 .select("firstname lastname UserLogin.userEmail isAdmin");
 
-let checkoutcart=await usercart.CheckoutModel.find({"userEmail":uid.UserLogin.userEmail});
+let checkoutcart=await usercart.CheckoutModel.find({'userEmail':uid.UserLogin.userEmail});
 res.send({message:"success",c:checkoutcart});
 }
 catch(error)
