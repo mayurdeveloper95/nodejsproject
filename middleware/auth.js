@@ -8,7 +8,7 @@ function auth(req,res,next)
 
     try{
     let decode=jwt.verify(tokens,config.get("key"));
-    req.userRegistration=decode;
+    req.userRegistrationSchema=decode;
     next();
     }
     catch(error)
