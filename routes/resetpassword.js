@@ -13,7 +13,7 @@ let user=await User.UserModel.findOne({
 });
 if(!user){return res.status(402).send({message:"invalid token or token expires"})};
 let oldpassword=await bcrypt.compare(req.body.UserLogin.userPassword,user.UserLogin.userPassword);
-if(oldpassword){return res.status(402).send({message:"password is old pleace change to new passowrd"})};
+if(oldpassword){return res.status(402).send({message:"password is old please change to new passowrd"})};
 user.UserLogin.userPassword=req.body.UserLogin.userPassword;
 user.resetPasswordToken=undefined;
 user.resetPasswordExpires=undefined;

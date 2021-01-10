@@ -1,5 +1,7 @@
 let express=require("express");
+var cors = require('cors');
 let ex=express();
+ex.use(cors())
 ex.use(express.json());
 let mongoose=require("mongoose");
 require("./startup/dbconnection")(mongoose);

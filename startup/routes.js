@@ -7,6 +7,7 @@ let productimage=require("../routes/productImageUpload");
 let subcategory=require("../routes/subCategory");
 let category=require("../routes/category");
 let usercart=require("../routes/userCart");
+let auth=require("../routes/auth");
 
 module.exports=function(ex)
 {
@@ -19,4 +20,5 @@ ex.use("/api",productimage);
 ex.use("/api",subcategory);
 ex.use("/api",category);
 ex.use("/api",usercart);
+ex.use("/api",auth);
 }
