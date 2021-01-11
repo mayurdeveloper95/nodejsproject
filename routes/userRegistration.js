@@ -39,7 +39,9 @@ router.post("/newuser",async(req,res)=>{
             updateDate:req.body.updateDate
         });
 
-
+        if (!createuser.termsAcceptCheck) {
+            return res.status(402).send("Please Accept Our Policy... Otherwise you cannot proceed further");
+          }
  
   let salt=await bcrypt.genSalt(10);
         createuser.UserLogin.userPassword=await bcrypt.hash(createuser.UserLogin.userPassword,salt);
