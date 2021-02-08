@@ -1,3 +1,4 @@
+  
 let mongoose=require("mongoose");
 let joi=require("joi");
 let subcategory=require("./subCategorySchema");
@@ -11,7 +12,7 @@ image:{
 },
 description:{type:String,required:true,min:5,max:500},
 price:{type:Number,required:true,minlength:1},
-quantity:{type:Number,required:true,min:1,max:100},
+quantity:{type:Number,required:true,min:1,max:1000},
 offerPrice:{type:Number,required:true,minlength:1},
 isAvailable:{type:Boolean,required:true},
 isTodayOffer:{type:Boolean,required:true},
@@ -48,4 +49,4 @@ function validationError(error)
     return schema.validate(error);
 }
 
-module.exports={ProductModel,validationError};
+module.exports={ProductModel,productSchema,validationError};

@@ -4,8 +4,8 @@ let products=require("../schema/productSchema");
 let getimage=require("../schema/productImageSchema");
 let category=require("../schema/categorySchema");
 let subcategory=require("../schema/subCategorySchema");
-let auth=require("../middleware/auth");
-let admin=require("../middleware/admin");
+let Auth=require("../middleware/auth");
+let Admin=require("../middleware/admin");
 
 
 router.post("/addproduct",async(req,res)=>{
@@ -86,7 +86,7 @@ catch(error)
     }
 });
 
-router.delete("/removeproduct/:id",[auth,admin],async(req,res)=>{
+router.delete("/removeproduct/:id",[Auth,Admin],async(req,res)=>{
 try{
     let productby=await products.ProductModel.findById(req.params.id);
     if(!productby){return res.status(400).send({message:"prodcut id not in database"})};

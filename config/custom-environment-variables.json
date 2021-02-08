@@ -1,3 +1,4 @@
 {
-    "key":"secretkey"
+    "key":"secretkey",
+    "password":"host_Password"
 }

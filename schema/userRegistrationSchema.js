@@ -11,16 +11,17 @@ let userSchema=new mongoose.Schema({
             userEmail:{type:String,required:true,unique:true},
             userPassword:{type:String,required:true,min:8,max:25}
     },
-    termsAcceptCheck:{type:Boolean,required:true},
+    termsAcceptCheck:{type:Boolean},
     resetPasswordToken:{type:String},
     resetPasswordExpires:{type:Date},
-    isAdmin:{type:Boolean},
+    isAdmin:{type:Boolean,default:false},
     recordDate:{type:Date, default:Date.now},
     updateDate:{type:Date, default:Date.now}
 });
 userSchema.methods.genToken=function()
 {
-return jwt.sign({_id:this._id,firstname:this.firstname,isAdmin:this.isAdmin},config.get("key"));
+let token = jwt.sign({_id:this._id,firstname:this.firstname,isAdmin:this.isAdmin},config.get("key"));
+return token;
 }
 let UserModel=mongoose.model("UserRegister",userSchema);
 
@@ -34,7 +35,7 @@ function validationError (error)
             userEmail:joi.string().required().email(),
             userPassword:joi.string().required().min(8).max(25)
         },
-        termsAcceptCheck:joi.boolean().required(),
+        termsAcceptCheck:joi.boolean(),
         resetPasswordToken:joi.string(),
         resetPasswordExpires:joi.date(),
         isAdmin:joi.boolean(),

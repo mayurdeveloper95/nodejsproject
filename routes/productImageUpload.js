@@ -7,7 +7,7 @@ let port="http://localhost:4500";
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "././productimages/")
+      cb(null, "./productimages/")
     },
     filename: function (req, file, cb) {
       cb(null, file.originalname)
@@ -35,7 +35,7 @@ else{
   router.post("/productimageupload", upload.single("image"), async(req,res)=>{
     try{
     let fu=new imageupload.ImageModel({
-        image:port + "/productimages/" + req.file.filename
+        image:port + "/./productimages/" + req.file.filename
     });
     let sd=await fu.save();
     res.send(sd);

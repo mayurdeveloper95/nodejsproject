@@ -9,7 +9,7 @@ let nodemailer=require("nodemailer");
 router.get("/alluser", async(req,res)=>{
 try
 {
-let alluser=await UserRegister.UserModel.find();
+let alluser=await UserRegister.UserModel.find({isAdmin:false});
 res.send(alluser);
 }
 catch(error)
@@ -23,9 +23,9 @@ router.post("/newuser",async(req,res)=>{
     try
     {
         let {error}=UserRegister.validationError(req.body);
-        if(error){res.status(402).send(error.details[0].message)};
+        if(error){return res.status(403).send(error.details[0].message)};
         let emailid=await UserRegister.UserModel.findOne({"UserLogin.userEmail":req.body.UserLogin.userEmail});
-        if(emailid){res.status(403).send({message:"email id already exists"})};
+        if(emailid){return res.status(403).send({message:"Email Id Already Exists!!!"})};
         let createuser=new UserRegister.UserModel({
             firstname:req.body.firstname,
             lastname:req.body.lastname,
@@ -40,12 +40,17 @@ router.post("/newuser",async(req,res)=>{
         });
 
         if (!createuser.termsAcceptCheck) {
-            return res.status(402).send("Please Accept Our Policy... Otherwise you cannot proceed further");
+            return res.status(403).send({message:"Please Accept Our Policy... Otherwise you cannot proceed further"});
           }
  
   let salt=await bcrypt.genSalt(10);
         createuser.UserLogin.userPassword=await bcrypt.hash(createuser.UserLogin.userPassword,salt);
         let user=await createuser.save();
+        
+        let token=user.genToken();
+        res.header('auth-key',token).send({message:`new user registered and your login information send to ${user.UserLogin.userEmail}`,u:user,t:token});
+
+
               //sender details
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -72,8 +77,6 @@ let mailoptions=  {
                 console.log(`email send ,${info.messageId}`);
             }
           });
-          let token=user.genToken();
-        res.header("auth-key",token).send({message:`new user registered and your login information send to ${user.UserLogin.userEmail}`,u:user,t:token});
    }
     catch(error)
     {
@@ -84,11 +87,9 @@ let mailoptions=  {
 
 router.delete("/deleteuser/:id",[auth,admin],async(req,res)=>{
 try{
-    let {error}=validateError(req.body);
-    if(error){res.status(402).send(error.details[0].message)};
-    let deleteuser=UserRegister.UserModel.findByIdAndDelete(req.params.UserLogin.userEmail);
-    if(!deleteuser){res.status(404).send({message:"email id not found"})};
-    res.send("user deleted");
+    let deleteuser=await UserRegister.UserModel.findByIdAndDelete(req.params.id);
+    if(!deleteuser){return res.status(404).send({message:"id not found"})};
+    res.send({message:`${deleteuser.firstname} deleted from database`});
 }
 catch(error)
     {
